@@ -1,0 +1,24 @@
+{
+  "name": "WFD Engineer Training Program",
+  "short_name": "WFD Engineer",
+  "description": "Westerville Fire Department Engineer Training Program — Protocols, Flowcharts & Calculators",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0C0C0E",
+  "theme_color": "#0C0C0E",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="WFD Engineer">
+<meta name="theme-color" content="#0C0C0E">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="description" content="Westerville Fire Department Engineer Training Program">
+<title>WFD Engineer Training Program</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0C0C0E;--sf:#161619;--sf2:#1E1E22;--sf3:#26262B;--bd:#2A2A30;--tx:#E8E8EC;--tx2:#9898A0;--tx3:#68686F;--ac:#E8412E;--acg:rgba(232,65,46,0.15);--r:12px;--rs:8px}
+body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--bg);color:var(--tx);height:100vh;overflow:hidden;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+#app{display:flex;height:100vh;overflow:hidden}
+
+/* Sidebar */
+.sb{width:280px;min-width:280px;background:var(--sf);border-right:1px solid var(--bd);display:flex;flex-direction:column;height:100vh;z-index:20;transition:transform .3s cubic-bezier(.4,0,.2,1)}
+.sb-hd{padding:20px 20px 16px;border-bottom:1px solid var(--bd)}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.shield{width:36px;height:36px;background:var(--ac);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#fff;flex-shrink:0}
+.bt{font-size:15px;font-weight:600;line-height:1.2}.bsub{font-size:11px;color:var(--tx3);letter-spacing:.5px;text-transform:uppercase}
+.strig{display:flex;align-items:center;gap:8px;width:100%;padding:8px 12px;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);color:var(--tx3);font-size:13px;cursor:pointer;margin-top:14px;transition:all .15s}
+.strig:hover{border-color:var(--tx3);color:var(--tx2)}.sk{margin-left:auto;font-size:11px;opacity:.5;font-family:'JetBrains Mono',monospace}
+.nav{flex:1;overflow-y:auto;padding:8px;scrollbar-width:thin;scrollbar-color:var(--sf3) transparent}
+.ni{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--rs);cursor:pointer;transition:all .15s;margin-bottom:2px;position:relative}
+.ni:hover{background:var(--sf2)}.ni.act{background:var(--acg)}
+.ni.act::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:20px;background:var(--ac);border-radius:0 3px 3px 0}
+.nn{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--tx3);width:22px;flex-shrink:0}
+.ni.act .nn{color:var(--ac)}.nic{font-size:16px;flex-shrink:0}
+.nt{font-size:13px;font-weight:500;color:var(--tx2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ni.act .nt{color:var(--tx);font-weight:600}
+.bk{margin-left:auto;font-size:12px;opacity:0;transition:opacity .15s;cursor:pointer;padding:2px;flex-shrink:0}
+.ni:hover .bk{opacity:.5}.bk:hover{opacity:1!important}.bk.sv{opacity:1!important;color:#FFB300}
+
+/* Main */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.pb{height:2px;background:var(--sf2);z-index:10}.pf{height:100%;background:var(--ac);transition:width .1s}
+.ct{flex:1;overflow-y:auto;scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:var(--sf3) transparent}
+.ci{max-width:760px;margin:0 auto;padding:40px 32px 120px}
+.chd{margin-bottom:40px;animation:fu .4s ease}
+@keyframes fu{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.cnm{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ac);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.ctt{font-size:32px;font-weight:700;line-height:1.15;letter-spacing:-.5px}
+.cns{display:flex;align-items:center;gap:8px;margin-top:20px}
+.cnb{display:flex;align-items:center;gap:6px;padding:6px 14px;background:var(--sf2);border:1px solid var(--bd);border-radius:20px;color:var(--tx2);font-size:12px;cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif}
+.cnb:hover{background:var(--sf3);color:var(--tx)}.cnb:disabled{opacity:.3;cursor:default}
+.cc{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--tx3);margin-left:auto}
+.sec{margin-bottom:32px;animation:fu .4s ease;animation-fill-mode:both}
+.sec:nth-child(2){animation-delay:.05s}.sec:nth-child(3){animation-delay:.1s}.sec:nth-child(4){animation-delay:.15s}.sec:nth-child(5){animation-delay:.2s}
+.st{font-size:18px;font-weight:600;margin-bottom:16px;color:var(--tx);display:flex;align-items:center;gap:8px}
+.st::before{content:'';width:4px;height:18px;background:var(--ac);border-radius:2px;flex-shrink:0}
+
+/* Section types */
+.s-callout{background:var(--acg);border-left:3px solid var(--ac);padding:20px 24px;border-radius:0 var(--rs) var(--rs) 0;font-size:15px;line-height:1.7;font-style:italic}
+.s-text{font-size:15px;line-height:1.75;color:var(--tx2)}
+.chk{display:flex;flex-direction:column;gap:4px}
+.chk-i{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-radius:var(--rs);cursor:pointer;font-size:14px;line-height:1.5;color:var(--tx2);background:var(--sf);border:1px solid var(--bd);transition:all .15s;user-select:none}
+.chk-i:hover{background:var(--sf2)}.chk-i.done{opacity:.5;text-decoration:line-through}
+.chk-b{width:20px;height:20px;min-width:20px;border:2px solid var(--bd);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--ac);margin-top:1px;transition:all .15s}
+.chk-i.done .chk-b{background:var(--ac);border-color:var(--ac);color:#fff}
+.specs{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+.spec{background:var(--sf);border:1px solid var(--bd);border-radius:var(--rs);padding:16px}
+.spec-l{display:block;font-size:11px;color:var(--tx3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.spec-v{display:block;font-size:20px;font-weight:700;font-family:'JetBrains Mono',monospace}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.card{background:var(--sf);border:1px solid var(--bd);border-radius:var(--rs);padding:16px;transition:all .15s}
+.card:hover{border-color:var(--ac);background:var(--sf2)}
+.card-n{font-size:14px;font-weight:600;margin-bottom:6px}.card-d{font-size:13px;color:var(--tx3);line-height:1.5}
+.ptbl{border:1px solid var(--bd);border-radius:var(--rs);overflow:hidden}
+.ptbl-r{display:flex;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--bd);font-size:14px}
+.ptbl-r:last-child{border-bottom:none}.ptbl-r:nth-child(odd){background:var(--sf)}
+.ptbl-l{color:var(--tx2)}.ptbl-v{font-weight:600;font-family:'JetBrains Mono',monospace;color:var(--ac)}
+.fl-bar{display:flex;align-items:center;gap:12px;background:var(--sf);border-radius:var(--rs);padding:12px 16px;border:1px solid var(--bd);margin-bottom:10px}
+.fl-h{font-weight:600;font-size:14px;width:50px}.fl-t{height:4px;border-radius:2px;flex:1;position:relative;overflow:hidden}
+.fl-f{height:4px;border-radius:2px;position:absolute;left:0;top:0}
+.fl-p{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600}
+.fl-n{font-size:13px;color:var(--tx3);padding:4px 0}
+.fc-s{display:flex;align-items:flex-start;gap:16px;background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:16px 20px;transition:all .2s;margin-bottom:4px}
+.fc-s:hover{border-color:var(--ac);transform:translateX(4px)}
+.fc-n{width:32px;height:32px;min-width:32px;background:var(--ac);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#fff}
+.fc-l{font-size:15px;font-weight:600;margin-bottom:2px}.fc-d{font-size:13px;color:var(--tx3)}
+.fc-a{text-align:center;padding:4px;color:var(--ac);font-size:18px}
+.proto-sub{font-size:13px;color:var(--tx3);margin-bottom:12px;font-style:italic}
+.proto-s{display:flex;align-items:flex-start;gap:12px;padding:10px 14px;background:var(--sf);border-radius:var(--rs);font-size:14px;color:var(--tx2);line-height:1.5;border:1px solid var(--bd);margin-bottom:6px}
+.proto-n{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ac);font-weight:600;min-width:20px;margin-top:2px}
+.dt-opt{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin-bottom:8px;transition:all .2s}
+.dt-opt.exp{border-color:var(--dt-c,var(--bd))}
+.dt-hd{display:flex;align-items:center;gap:14px;padding:16px 20px;cursor:pointer;transition:background .15s}
+.dt-hd:hover{background:var(--sf2)}
+.dt-ind{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.dt-nm{font-size:15px;font-weight:600}.dt-cond{font-size:12px;color:var(--tx3)}
+.dt-chev{margin-left:auto;font-size:18px;color:var(--tx3);font-weight:300}
+.dt-steps{padding:0 20px 16px 46px;display:flex;flex-direction:column;gap:6px;animation:fu .2s ease}
+.dt-st{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--tx2);line-height:1.5}
+.dt-sn{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;min-width:16px;margin-top:3px}
+.warn{display:flex;gap:14px;background:rgba(255,152,0,.08);border:1px solid rgba(255,152,0,.25);border-radius:var(--r);padding:16px 20px}
+.warn-ic{font-size:20px;flex-shrink:0;margin-top:2px}
+.warn-i{font-size:14px;color:#FFB74D;line-height:1.5;margin-bottom:6px}
+.num-s{display:flex;align-items:flex-start;gap:14px;padding:10px 0}
+.num-c{width:28px;height:28px;min-width:28px;background:var(--sf2);border:1px solid var(--bd);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;font-family:'JetBrains Mono',monospace;color:var(--ac)}
+.num-t{font-size:14px;color:var(--tx2);line-height:1.6;padding-top:3px}
+.pri-i{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:var(--rs);font-size:14px;color:var(--tx2);border:1px solid var(--bd);margin-bottom:6px}
+.pri-b{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;color:#fff}
+.atk-tabs{display:flex;gap:4px;margin-bottom:16px;flex-wrap:wrap}
+.atk-tab{padding:8px 16px;border-radius:20px;border:1px solid var(--bd);background:var(--sf);color:var(--tx2);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif}
+.atk-tab:hover{background:var(--sf2)}.atk-tab.act{background:var(--ac);border-color:var(--ac);color:#fff}
+.atk-d{font-size:13px;color:var(--tx3);margin-bottom:12px;font-style:italic}
+.atk-c{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--sf);border:1px solid var(--bd);border-radius:var(--rs);font-size:13px;margin-bottom:4px}
+.atk-s{color:var(--tx2)}.atk-p{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--ac);font-size:14px}
+.eng-sp{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--ac);margin-bottom:16px;padding:10px 14px;background:var(--acg);border-radius:var(--rs);border:1px solid rgba(232,65,46,.2)}
+.eng-n{margin-top:12px;padding:12px 16px;background:rgba(255,152,0,.08);border-radius:var(--rs);font-size:13px;color:#FFB74D;line-height:1.6;border:1px solid rgba(255,152,0,.2)}
+.cmp{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:start}
+.cmp-col{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:20px}
+.cmp-t{font-size:15px;font-weight:600;margin-bottom:12px}
+.cmp-p{font-size:13px;color:var(--tx2);padding:6px 0;border-bottom:1px solid var(--bd);line-height:1.5}
+.cmp-p:last-child{border-bottom:none}.cmp-vs{font-size:12px;font-weight:700;color:var(--tx3);padding-top:30px}
+.eq-sp{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--tx3);margin-bottom:10px;padding:8px 12px;background:var(--sf);border-radius:var(--rs);border:1px solid var(--bd)}
+.eq-u{font-size:14px;color:var(--tx2);line-height:1.5;margin-bottom:4px}
+.eq-w{margin-top:12px;padding:10px 14px;background:rgba(255,152,0,.08);border-radius:var(--rs);font-size:13px;color:#FFB74D;border:1px solid rgba(255,152,0,.2)}
+.gas-u{font-size:14px;color:var(--tx2);margin-bottom:16px}
+.gas-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.gas-c{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:16px}
+.gas-n{font-size:22px;font-weight:700;font-family:'JetBrains Mono',monospace;margin-bottom:10px}
+.gas-r{display:flex;justify-content:space-between;font-size:13px;padding:4px 0;color:var(--tx2)}
+.gas-r.alm span:last-child{color:#F44336;font-weight:600}
+.gas-nt{font-size:12px;color:var(--tx3);margin-top:8px;line-height:1.5}
+.dist{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:20px;margin-bottom:10px}
+.dist-n{font-size:16px;font-weight:600;margin-bottom:10px}
+.dist-r{display:flex;justify-content:space-between;font-size:13px;padding:4px 0;color:var(--tx2)}
+.dist-r span:first-child{color:var(--tx3)}
+.dist-nt{font-size:13px;color:#FFB74D;margin-top:10px;line-height:1.5}
+
+/* Search */
+.s-ov{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);z-index:100;display:flex;align-items:flex-start;justify-content:center;padding-top:15vh;animation:fi .15s}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+.s-md{width:560px;max-width:90vw;background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);box-shadow:0 20px 60px rgba(0,0,0,.5);overflow:hidden}
+.s-iw{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--bd)}
+.s-in{flex:1;background:none;border:none;color:var(--tx);font-size:16px;font-family:'DM Sans',sans-serif;outline:none}
+.s-in::placeholder{color:var(--tx3)}
+.s-rs{max-height:360px;overflow-y:auto;padding:8px}
+.s-ri{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:var(--rs);cursor:pointer;transition:background .1s}
+.s-ri:hover{background:var(--sf2)}
+.s-rc{font-size:11px;color:var(--tx3);font-family:'JetBrains Mono',monospace;min-width:40px}
+.s-rs-t{font-size:14px}
+.s-empty{padding:32px;text-align:center;color:var(--tx3);font-size:14px}
+
+/* Mobile */
+.mh{display:none;align-items:center;gap:12px;padding:12px 16px;background:var(--sf);border-bottom:1px solid var(--bd);z-index:15}
+.hb{width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);cursor:pointer;font-size:18px;color:var(--tx)}
+.mtt{font-size:15px;font-weight:600}.ms{margin-left:auto}
+.sbo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:19}.sbo.open{display:block}
+@media(max-width:768px){
+  .sb{position:fixed;left:0;top:0;height:100vh;transform:translateX(-100%)}.sb.open{transform:translateX(0)}
+  .mh{display:flex}.ci{padding:24px 16px 120px}.ctt{font-size:24px}.sk{display:none}
+  .cmp{grid-template-columns:1fr}.cmp-vs{text-align:center;padding:8px 0}
+}
+@media(max-width:480px){.gas-g{grid-template-columns:1fr}.cards{grid-template-columns:1fr}}
+/* Calculators */
+.calc{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:24px;margin-top:4px}
+.calc-title{font-size:14px;font-weight:600;color:var(--ac);text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.calc-title::before{content:'⚡';font-size:16px}
+.calc-row{display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.calc-label{font-size:13px;color:var(--tx2);min-width:120px}
+.calc-select,.calc-input{background:var(--sf2);border:1px solid var(--bd);border-radius:var(--rs);padding:8px 12px;color:var(--tx);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .15s}
+.calc-select:focus,.calc-input:focus{border-color:var(--ac)}
+.calc-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2368686F'%3E%3Cpath d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:30px;cursor:pointer}
+.calc-input{width:90px;text-align:center;font-family:'JetBrains Mono',monospace}
+.calc-input::-webkit-inner-spin-button{-webkit-appearance:none}
+.calc-result{margin-top:16px;padding:16px 20px;background:var(--acg);border:1px solid rgba(232,65,46,.3);border-radius:var(--rs);display:flex;align-items:center;justify-content:space-between}
+.calc-result-label{font-size:14px;color:var(--tx2)}
+.calc-result-value{font-size:28px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--ac)}
+.calc-result-unit{font-size:14px;color:var(--tx3);font-weight:400}
+.calc-breakdown{margin-top:12px;padding:12px 16px;background:var(--sf2);border-radius:var(--rs);font-size:13px;color:var(--tx3);line-height:1.8;font-family:'JetBrains Mono',monospace}
+.calc-breakdown span{color:var(--tx)}
+.calc-divider{height:1px;background:var(--bd);margin:16px 0}
+.calc-note{font-size:12px;color:var(--tx3);margin-top:8px;font-style:italic}
+.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:600px){.calc-grid{grid-template-columns:1fr}.calc-row{flex-direction:column;align-items:stretch}.calc-label{min-width:auto}}
+</style>
+</head>
+<body>
+<div class="mh" id="mobileHeader">
+  <div class="hb" onclick="toggleSidebar()">☰</div>
+  <div class="mtt" id="mobileTitle"></div>
+  <div class="hb ms" onclick="openSearch()">🔍</div>
+</div>
+<div class="sbo" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+<div id="app">
+  <div class="sb" id="sidebar">
+    <div class="sb-hd">
+      <div class="brand"><div class="shield">W</div><div><div class="bt">Engineer Training</div><div class="bsub">Westerville Fire Dept</div></div></div>
+      <div class="strig" onclick="openSearch()">🔍 Search protocols...<span class="sk">⌘K</span></div>
+    </div>
+    <div class="nav" id="navList"></div>
+  </div>
+  <div class="main">
+    <div class="pb"><div class="pf" id="progressFill"></div></div>
+    <div class="ct" id="content" onscroll="updateProgress()"></div>
+  </div>
+</div>
+<div class="s-ov" id="searchOverlay" style="display:none" onclick="if(event.target===this)closeSearch()">
+  <div class="s-md">
+    <div class="s-iw"><span>🔍</span><input class="s-in" id="searchInput" placeholder="Search protocols, equipment, pressures..." oninput="doSearch()"><span style="font-size:12px;color:var(--tx3);cursor:pointer" onclick="closeSearch()">ESC</span></div>
+    <div class="s-rs" id="searchResults"><div class="s-empty">Start typing to search all chapters</div></div>
+  </div>
+</div>
+
+<script>
+// ── CHAPTER DATA ──
+const CH=[
+{id:"mission",n:"01",t:"The Engineer's Mission",ic:"🎯",sections:[
+{t:"Mission Statement",ty:"callout",content:"To ensure the apparatus and all equipment are mission-ready at all times—beginning each shift in peak condition, maintaining that standard throughout, and passing it on without compromise. To serve the crew by managing water supply, pump operations, and apparatus placement with precision and confidence."},
+{t:"The Role",ty:"text",content:"The engineer holds one of the most vital roles in the fire service—ensuring that every piece of apparatus and equipment is ready to perform at a moment's notice. While the company officer bears ultimate responsibility for operations, the engineer is the backbone that makes those operations possible."},
+{t:"Skills Checklist",ty:"checklist",items:["Check and maintain critical fluid, water and air levels","Perform daily truck check and check sheet","Use and maintain all equipment on the engine","Basic working knowledge of pump operations","Knowledge of friction loss for hose, appliances and elevation","Maintain all hoseloads and nozzles","Properly place engine based on arrival and assignments","Access mapping and knowledge of major intersections","Knowledge of first due area","Properly pump all handlines and master streams","Knowledge of each water declaration and actions","Give and receive water to and from the engine","Set up alternative water source operation","Knowledge of all secondary functions","Use of master streams (RAM & Deck Gun)"]}
+]},
+{id:"truck",n:"02",t:"The Truck — E112",ic:"🚒",sections:[
+{t:"Apparatus Specs",ty:"specs",items:[{l:"Tank",v:"750 Gal"},{l:"Foam",v:"20 Gal (A)"},{l:"Pump",v:"1,500 GPM"}]},
+{t:"Hose Packages",ty:"cards",items:[{n:"Crosslays",d:"200ft — 100ft load side, 100ft bundle"},{n:"Chicago Load",d:"150ft bundle"},{n:"Blitz Line",d:"250ft 2½\" — 150ft load, 100ft bundle"},{n:"3 Inch",d:"600ft — 300ft to RAM, 300ft to Gate"},{n:"High Rise",d:"100ft attack + 50ft supply bundle"},{n:"Bumper Line",d:"100ft preconnect, 50ft rolled in tray"},{n:"5\" Supply",d:"1,000ft"}]},
+{t:"Nozzle Pressures — At the Tip",ty:"ptable",items:[{n:"Smooth Bore (1¾\" & 2½\")",p:"50 PSI"},{n:"Combo Tip / Trash Line",p:"75 PSI"},{n:"RAM",p:"80 PSI"},{n:"Deck Gun",p:"80 PSI"}]},
+{t:"5/10/20/30 Rule — Friction Loss per 100ft",ty:"floss",items:[{h:"3\"",l:"5",c:"#4CAF50"},{h:"2½\"",l:"10",c:"#FF9800"},{h:"1¾\"",l:"20",c:"#F44336"},{h:"TruID",l:"30",c:"#9C27B0"}],notes:["10 PSI friction loss for appliances","5 PSI friction loss for elevation — add per floor starting at 2nd floor"]}
+]},
+{id:"fireground",n:"03",t:"Fireground Operations",ic:"🔥",sections:[
+{t:"Fireground Flowchart",ty:"flow",steps:[{l:"DISPATCH",d:"Receive assignment, begin route"},{l:"EN ROUTE",d:"Size-up begins, review pre-plan"},{l:"ARRIVAL",d:"Position apparatus, 360° size-up"},{l:"WATER DECLARATION",d:"Have Water / Need Water / Long Lay / Alt Source"},{l:"PUMP ENGAGEMENT",d:"Universal pump start sequence"},{l:"ATTACK SELECTION",d:"Single / Two Line / Blitz / Defensive"},{l:"SUSTAINED OPS",d:"Monitor pressure, secondary functions"}]}
+]},
+{id:"placement",n:"04",t:"Arriving Position & Placement",ic:"📍",sections:[
+{t:"First Arriving Engine",ty:"proto",sub:"Residential / Multi-family / Commercial",steps:["Place in most advantageous position for fire attack","Position just past structure — see three sides (75% size-up)","Leave room for ladder company aerial access","For rear attack lines — straight shot pulling packages","For crosslays — nose bumper toward fire building to soften 90° bend","First engine's most important role is fire attack — everything else secondary"]},
+{t:"Second Arriving Engine",ty:"proto",sub:"Water Supply Responsibility",steps:["Responsible for water supply","Get water to primary engine ASAP","If primary has supply — forward/reverse lay from secondary hydrant","Keep 5\" curbside for roadway access","If FDC present — park on hydrant side, secure FDC"]},
+{t:"Third / Fourth Arriving",ty:"proto",sub:"Support Operations",steps:["Ensure adequate water supply is established","If 1st/2nd couldn't make supply — now your responsibility","Stage and await assignment from command"]}
+]},
+{id:"water",n:"05",t:"Water Supply Operations",ic:"💧",sections:[
+{t:"The Water Declaration",ty:"dtree",options:[
+{n:"Have Water",cond:"Within 200ft of a water supply",c:"#4CAF50",steps:["Driver of First Engine establishes own supply on hydrant within 200ft","Driver of Second Engine forward/reverse lays second supply from another hydrant"]},
+{n:"Need Water",cond:"Outside 200ft — Booster Back Up",c:"#FF9800",steps:["Officer/Engineer declares \"Booster Back Up\" on radio","First Engine sets attack line(s) with tank water","First Engine rolls 3\" supply (50-100ft) to intake","Second Engine splits distance — within 150ft of first","Second Engine secures hydrant once relay established","⚠️ ALL hydrant-to-engine connections use 5\" supply"]},
+{n:"Long Lay",cond:"Over 500ft from road to structure",c:"#F44336",steps:["First Engine Officer declares \"Long Lay\"","First Engine as close to structure as possible","First Engine rolls 50ft 3\" to intake","Second Engine lays 5\" from road to first engine","Second Engine parks within 50ft, rolls 3\" to discharge","Second Engine dumps tank to first until full","Third Engine relays from positive water source"]},
+{n:"Alternative Source",cond:"No hydrant areas",c:"#9C27B0",steps:["Hydrant within 1,000ft? YES → Declare Long Lay","NO → Declare no known water source","First medic commands water supply — locate nearest hydrant","Set up dump tanks, relay pumping, or water shuttles"]}
+]}
+]},
+{id:"pump",n:"06",t:"Pump Operations",ic:"⚙️",sections:[
+{t:"Universal Pump Start",ty:"nsteps",steps:["Place the truck in park","Engage Pump one click (middle) — Green \"pump engaged\"","Engage Pump one more click (bottom) — Green \"ok to pump\"","Place truck in Drive","Prime Pump (Black Prime button)","Pull \"Tank to Pump\"","Hit Preset on Pump Control Station","Pull selected discharge","Ensure correct pressure at discharge gauge while flowing"]},
+{t:"Key Pump Facts",ty:"text",content:"Centrifugal pumps rated 1,500–2,000 GPM. Water enters center through all intakes and tank-to-pump line, spun at high speed, discharged to outlets. Pump MUST have water on impeller to draw (PRIME). A dry pump cannot pull prime by itself."},
+{t:"Tank Water — Critical",ty:"warn",items:["One 1.75\" line at 165 GPM = ~4.5 min from 750-gal tank","Keep tank full — supply loss means seconds for crews to find refuge","Low tank risks pump overheating even when not flowing","Supply failure: (1) PULL TANK-TO-PUMP → (2) Radio → (3) Troubleshoot"]},
+{t:"Discharge Priority",ty:"pri",items:[{p:1,t:"Lines with crews in IDLH atmospheres"},{p:2,t:"Lines protecting exposures"},{p:3,t:"Lines filling tank for backup supply"},{p:4,t:"All additional auxiliary lines"}]},
+{t:"Daily Pump Check",ty:"checklist",items:["Pump engagement via 3-position valve","Panel lighting — \"ok to pump\" light","Water and Foam levels FULL","Tank-to-pump valve opens freely","Attack pressures established and maintained","Relief valve operational, screen clean","Pump primer working","Tank-fill valve opens freely","Discharge drains exercised","Manual pump engagement handle location/use","Gauges zeroed","Tank-to-Pump or intake manifold ALWAYS fully open"]}
+]},
+{id:"attack",n:"07",t:"Attack Selection & Pressures",ic:"🎯",sections:[
+{t:"Attack Modes",ty:"atk",modes:[
+{n:"Single Line",d:"One attack line for interior operations",configs:[{s:"1 × 200ft Crosslay",p:"90 PSI"},{s:"Chicago + 300ft 3\"",p:"105 PSI"},{s:"Chicago + 200ft 3\"",p:"100 PSI"},{s:"Chicago + 100ft 3\"",p:"95 PSI"},{s:"Chicago + 250ft 2½\"",p:"105 PSI"},{s:"Chicago + 350ft 2½\"",p:"115 PSI"},{s:"Chicago + 400ft 2½\"",p:"125 PSI"},{s:"2½\" 250ft Blitz Line",p:"75 PSI"},{s:"Trash Line",p:"60 PSI (max 75)"}]},
+{n:"Two Line",d:"Two attack lines for interior operations",configs:[{s:"2 × 200ft Crosslay",p:"90 PSI (110 TruID)"},{s:"1 Chicago + 1 Crosslay",p:"See tables"},{s:"1 Blitz + 1 Crosslay",p:"75 / 90 PSI"},{s:"1 Blitz + 1 Chicago",p:"75 / See tables"}]},
+{n:"Blitz Attack",d:"Transitional — exterior to interior",configs:[{s:"Two 1¾\" Crosslays",p:"90 PSI (110 TruID)"},{s:"2½\" Blitz Line",p:"75 PSI"},{s:"Deck Gun",p:"80 PSI"},{s:"RAM + 300ft 3\"",p:"105 PSI"},{s:"RAM + 200ft 3\"",p:"100 PSI"},{s:"RAM + 100ft 3\"",p:"95 PSI"}]},
+{n:"Defensive",d:"Exterior only — no interior transition",configs:[{s:"2½\" Blitz Line",p:"75 PSI"},{s:"Deck Gun",p:"80 PSI"},{s:"RAM + 300ft 3\"",p:"105 PSI"},{s:"RAM + 200ft 3\"",p:"100 PSI"},{s:"RAM + 100ft 3\"",p:"95 PSI"}]}
+]},
+{t:"Secondary Functions",ty:"checklist",items:["Ensure hose lines free from kinks — truck to door","Stretch secondary attack line","Deploy ground ladders","Track equipment off the truck","Bring spare bottles for switch out","All equipment back to ready after incident"]}
+]},
+{id:"engines",n:"08",t:"Engine-Specific Operations",ic:"🔧",sections:[
+{t:"Engine/Rescue 111",ty:"eng",sp:"1,500 GPM • 550 gal tank • 30 gal foam",steps:["Place truck in Neutral","3-position switch to bottom (pause in middle)","Place truck in Drive — note speedometer rise","Check \"throttle ready\" light","Open tank-to-pump","Primer (if needed)","Coordinate with crews to charge line","Adjust pressure or hit \"preset\"","Verify governor in \"RPM\" mode","Crack tank-to-fill"]},
+{t:"Engine 112",ty:"eng",sp:"750 gal tank • 20 gal foam • 1,500 GPM",steps:["Place truck in Neutral","3-position switch to bottom (pause in middle)","Place truck in Drive","Check \"throttle ready\" light","Open tank-to-pump","Primer (if needed)","Coordinate to charge line","Adjust pressure or hit \"preset\"","Verify governor in \"RPM\" mode","Crack tank-to-fill"],nt:"Foam requires BOTH digital foam/flow panel \"on\" AND upper \"Foam\" toggle up."},
+{t:"Engine 113",ty:"eng",sp:"1,500 GPM • 500 gal tank • 30 gal foam",steps:["Place truck in Neutral","3-position switch to bottom (pause in middle)","Place truck in Drive","Check \"throttle ready\" light","Open tank-to-pump","Primer (if needed)","Coordinate to charge line","Adjust pressure","Set Discharge Relief Valve","Crack tank-to-fill"],nt:"Manual twist throttle + pressure-relief valve. Preconnects off back ONLY. Handles stay locked. Relief valve: each half-turn ≈ 10 PSI."}
+]},
+{id:"hoses",n:"09",t:"Hoses & Nozzles",ic:"💨",sections:[
+{t:"The Nozzleman's Creed",ty:"callout",content:"\"Without me my nozzle is useless. Without my nozzle, I am useless…\" — The Nozzleman"},
+{t:"Nozzle Types",ty:"cards",items:[{n:"Smooth Bore — Attack",d:"Elkhart 188-XD ⅞\" • 50 PSI NP"},{n:"Smooth Bore — High Rise",d:"1-⅛\" discharge • 50 PSI NP"},{n:"Chief XD — Bumper",d:"185 GPM @ 75 PSI • Fixed"},{n:"Chief XD — Blitz",d:"250 GPM @ 50 PSI • 2½\" lines"}]},
+{t:"Attack Line Considerations",ty:"warn",items:["Target minimum 160 GPM for initial interior attack","Direct correlation: water flow ↔ nozzle reaction","Must pump at appropriate pressures for reach & penetration","Over/under-pumping creates repercussion in flow and reaction"]},
+{t:"Ball Shut-Off Types",ty:"cmp",left:{n:"Double Cut Ball",pts:["Flow assists opening/closing","Creates turbulence in stream","Less critical in combo nozzles"]},right:{n:"Full Round Ball",pts:["Smooth discharge orifice","Tighter stream, less turbulence","Preferred for smooth bore"]}},
+{t:"Nozzle Maintenance",ty:"nsteps",steps:["Inspect for cleanliness and defects","Check bumper, teeth, bail screws","Inspect swivel — spins freely, check gasket","Soak in warm water + Simple Green/Dawn","Cycle bumper through full range and bail","Dry with rag — silicone lubricant only (Dow-Corning #7)","Extreme cases: remove and clean ball bearings","Unresolved issues → consult senior engineer"]}
+]},
+{id:"foam",n:"10",t:"Class A Foam",ic:"🧴",sections:[
+{t:"How Foam Works",ty:"text",content:"Class A foam stretches water droplets into bubbles, increasing heat-absorbing surface area. It penetrates deep into Class A fuels, bonds with carbon, grabs onto smoke to increase visibility, and reduces water needed for extinguishment."},
+{t:"Key Specs",ty:"specs",items:[{l:"Default",v:"0.3%"},{l:"Max Rate",v:"1.0%"},{l:"Type",v:"WD881"},{l:"Activation",v:"Auto"}]},
+{t:"Important Notes",ty:"warn",items:["Has some Class B qualities — can substitute if B unavailable","Constant application required — breaks down faster than B","Do NOT use during training — expensive","Can create mess and environmental hazard","Not on every discharge — check labels/valve handles"]}
+]},
+{id:"equipment",n:"11",t:"Equipment Overview",ic:"🧰",sections:[
+{t:"Piercing Nozzle Applicator",ty:"equip",sp:"Model 2308-3 • 1½\" • 37\" • 10.1 lbs • 125 GPM @ 100 PSI",uf:"Box/semi fires, dumpsters, hidden compartments, car fires, attic/basement",steps:["Attach hose section and shut-off nozzle","Place tip on exterior surface","Drive in and open shut-off"],w:"Possible smoke explosion when introducing air into starved-air spaces"},
+{t:"RAM XD Monitor",ty:"equip",sp:"Elkhart • 2.5\" I/O • 1⅜\" tip • 505 GPM @ 80 PSI",uf:"Single FF delivering large water volume — can be left unmanned",steps:["Deploy with 20ft straight hose behind","Four fold-out legs with carbide spikes","Locking pin prevents accidental opening"],w:"Max 500 GPM / 150 PSI. Multiple FFs to reposition."},
+{t:"5-Way Manifold",ty:"equip",sp:"Harrington • 5\" manifold • Four 2.5\" outlets",uf:"Securing hydrant for supply operations",steps:["Hook 5\" from hydrant to manifold","Hook 5\" from manifold to engine","2.5\" outlets face away from hydrant"],w:"ALL valves closed before opening hydrant — catastrophic failure risk"},
+{t:"Water Thief / Tri-Gate",ty:"equip",sp:"Elkhart BG-104-A • 2.5\" in • 1×2.5\" + 2×1.5\" out • +5 PSI FL",uf:"Chicago Load setups, exposure lines, RAM-to-attack transition",steps:["Preconnected to all 3\" lines","Stored with valves CLOSED & LOCKED"],w:"3\" max ~600 GPM. RAM uses 500 GPM — limited additional capacity."},
+{t:"Extinguisher Comparison",ty:"cmp",left:{n:"Water Can",pts:["2.5 gal • Class A • 100 PSI","Nozzleman carries for investigations","Add ½ cup Class A foam","Rated 2-A"]},right:{n:"Dry Chem / CO2",pts:["Dry: 6-A, 120-BC • CO2: 10-BC","First-out for electrical fires","CO2 for grease/cooking","Dry chem shuts down kitchens"]}}
+]},
+{id:"scba",n:"12",t:"SCBA & Safety",ic:"🫁",sections:[
+{t:"Scott SCBA",ty:"equip",sp:"Self Contained Breathing Apparatus",uf:"Any IDLH atmosphere or as SOPs/officer dictates",steps:["Don per department protocol","Verify seal and air supply","Monitor consumption throughout ops"],w:"Consumption varies: temp, intensity, fitness, SCBA comfort level"},
+{t:"Scott RIT Pack III",ty:"equip",sp:"Portable air supply • Pressure reducer • Charging wand • LP hose",uf:"Primary tool for all RIT operations",steps:["Compatible with all NFPA 1981 SCBA","LP hose works with non-Scott SCBA","Multiple solutions for SCBA emergencies"],w:"High-stress, low-viz situations. Must be fully proficient."},
+{t:"Pak-Tracker Locator",ty:"equip",sp:"2.4 GHz RF • 36 SCBA capacity • Glove-friendly",uf:"RIT operations — locate trapped/downed firefighters",steps:["Auto-activates on SCBA air","3 visual + audible indicators","LEDs show signal strength and direction"],w:"Must know current pack seat assignments."}
+]},
+{id:"thermal",n:"13",t:"Thermal Imaging & Detection",ic:"🌡️",sections:[
+{t:"FLIR K33 TIC",ty:"equip",sp:"240×180 • 60 Hz • 4\" LCD • -4°F to 1202°F • 2.4 lbs",uf:"Primary for all interior/exterior fire ops and nighttime SAR",steps:["One button starts TI-Basic mode"],w:"A little bulky to carry"},
+{t:"Seek Reveal Fire Pro X",ty:"equip",sp:"320×240 • 76,800 pixels • Waterproof • 3.5hr • 300-lumen LED",uf:"Supplemental for fire ops and nighttime SAR",steps:["Review features before field use"],w:"Small keys hard with gloves. Can get snagged."},
+{t:"Sensit GOLD G2 4-Gas Meter",ty:"gas",uf:"Gas leaks, CO runs, fire alarms, overhaul, unexplained symptoms",gases:[{n:"O₂",nm:"21%",al:"<19.5%",nt:"Below 10% affects other gauges"},{n:"CO",nm:"0–3 PPM",al:"35 PPM",nt:"50 PPM = 8hr OSHA limit"},{n:"LEL",nm:"0%",al:"10%",nt:"Calibrated to Pentane. 50%+ = explosive"},{n:"H₂S",nm:"0 PPM",al:"10 PPM",nt:"Sewers/voids. Smell fades at danger."}]}
+]},
+{id:"tools",n:"14",t:"Specialty Tools",ic:"🛠️",sections:[
+{t:"Milwaukee M18 Battery Tools",ty:"cards",items:[{n:"Sawzall",d:"Heavy demolition blade"},{n:"Flood Lights",d:"Throw inside windows for egress"},{n:"14\" Cut-off Saw",d:"Diamond blade"},{n:"Angle Grinder",d:"Diamond blade"},{n:"Chainsaw",d:"NOT for roof ventilation"},{n:"PPV Fans",d:"M18 platform"}]},
+{t:"Battery Notes",ty:"warn",items:["Run regardless of smoke (unlike combustion)","Spare batteries kept charged on trucks","Check daily regardless of use","Not for specialized heavy tasks"]},
+{t:"Additional Tools",ty:"cards",items:[{n:"BigEasy Lockout Kit",d:"55\" tool for vehicle lockouts"},{n:"Hot Stick Voltage Detector",d:"AC detection — awareness only"},{n:"Little Giant Leveler",d:"Adjustable ladder, 300 lbs"},{n:"Hazmat Kit",d:"F Paper, pH Paper, H₂O, Tape"},{n:"Chimney Bomb Kit",d:"4 dry chem bombs for above-flue fires"},{n:"Lockout/Tagout Kit",d:"Hasp + padlock for machinery"},{n:"Knox FDC Wrench",d:"Access Knox lock cap connections"}]}
+]},
+{id:"hydrants",n:"15",t:"District Water Systems",ic:"🚰",sections:[
+{t:"Hydrant Systems by District",ty:"dist",districts:[
+{n:"City of Westerville",pr:"Up to 80 PSI",sp:"300–600ft",th:"Standard 5\" and 2.5\"",nt:"Reliable. Can call water plant for increased demand."},
+{n:"Blendon Township",pr:"Variable — Low",sp:"300–600ft (some 1,000ft+)",th:"Standard 5\" and 2.5\"",nt:"⚠️ Not reliable. Expect low flows or sudden pipe collapses."},
+{n:"Delaware County",pr:"Typically reliable",sp:"Variable in rural",th:"5\" Storz or DELCO adapter + 2.5\"",nt:"Requires DELCO adapter for 5\" connections."},
+{n:"City of Columbus",pr:"Reliable",sp:"Standard",th:"Single 5\" — NO 2.5\"",nt:"⚠️ Square nut — typically REVERSE THREAD. Wrench in PO compartment."}
+]}
+]},
+{id:"fl-calc",n:"16",t:"Friction Loss Calculator",ic:"🔢",sections:[
+{t:"Friction Loss Calculator",ty:"fl-calc"},
+{t:"How It Works",ty:"text",content:"Friction Loss = Coefficient × Length (in 100ft sections). Coefficients: 5\" Supply = 0.08, 3\" = 5, 2½\" = 10, 1¾\" = 20, TruID = 30. Add 10 PSI per appliance. Add 5 PSI per floor above ground (starting at 2nd floor)."},
+{t:"Quick Reference",ty:"ptable",items:[{n:"3\" hose per 100ft",p:"5 PSI"},{n:"2½\" hose per 100ft",p:"10 PSI"},{n:"1¾\" hose per 100ft",p:"20 PSI"},{n:"TruID per 100ft",p:"30 PSI"},{n:"Each appliance",p:"10 PSI"},{n:"Each floor above 1st",p:"5 PSI"}]}
+]},
+{id:"dp-calc",n:"17",t:"Discharge Pressure Calculator",ic:"📊",sections:[
+{t:"Discharge Pressure Calculator",ty:"dp-calc"},
+{t:"Formula",ty:"callout",content:"Discharge Pressure = Nozzle Pressure + Friction Loss + Appliance Loss + Elevation Loss"},
+{t:"Common Nozzle Pressures",ty:"ptable",items:[{n:"Smooth Bore Handline (⅞\")",p:"50 PSI"},{n:"Smooth Bore High Rise (1⅛\")",p:"50 PSI"},{n:"Chief XD Bumper (185 GPM)",p:"75 PSI"},{n:"Chief XD Blitz (250 GPM)",p:"50 PSI"},{n:"Combo/Trash Line",p:"75 PSI"},{n:"RAM XD (1⅜\" tip)",p:"80 PSI"},{n:"Deck Gun",p:"80 PSI"}]},
+{t:"Pre-Calculated Setups",ty:"cards",items:[
+{n:"200ft Crosslay",d:"50 + 40 + 0 = 90 PSI"},
+{n:"Blitz Line 250ft 2½\"",d:"50 + 25 + 0 = 75 PSI"},
+{n:"Trash Line",d:"75 NP → 60 PSI (max 75)"},
+{n:"Chicago + 300ft 3\"",d:"50 + 15 + 10 + 30 = 105 PSI"},
+{n:"Chicago + 200ft 3\"",d:"50 + 10 + 10 + 30 = 100 PSI"},
+{n:"RAM + 300ft 3\"",d:"80 + 15 + 10 = 105 PSI"},
+{n:"Deck Gun",d:"80 PSI discharge"}
+]}
+]}
+];
+
+// ── STATE ──
+let active = "mission";
+let bookmarks = JSON.parse(localStorage.getItem("wfd-bm")||"[]");
+
+// ── SEARCH INDEX ──
+let searchIdx = [];
+CH.forEach(ch => {
+  searchIdx.push({cid:ch.id,text:ch.t.toLowerCase(),sec:ch.t});
+  ch.sections.forEach(s => {
+    let txt = [s.t||""];
+    if(s.content) txt.push(s.content);
+    if(s.items) s.items.forEach(i => txt.push(typeof i==="string"?i:Object.values(i).join(" ")));
+    if(s.steps) s.steps.forEach(st => txt.push(typeof st==="string"?st:`${st.l||""} ${st.d||""}`));
+    if(s.options) s.options.forEach(o => {txt.push(o.n,o.cond||"");(o.steps||[]).forEach(st=>txt.push(st));});
+    if(s.modes) s.modes.forEach(m => {txt.push(m.n);(m.configs||[]).forEach(c=>txt.push(`${c.s} ${c.p}`));});
+    if(s.gases) s.gases.forEach(g => txt.push(`${g.n} ${g.nt||""}`));
+    if(s.districts) s.districts.forEach(d => txt.push(`${d.n} ${d.nt||""}`));
+    searchIdx.push({cid:ch.id,text:txt.join(" ").toLowerCase(),sec:s.t});
+  });
+});
+
+// ── RENDER HELPERS ──
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+function renderSection(s) {
+  switch(s.ty) {
+    case "callout": return `<div class="s-callout">${esc(s.content)}</div>`;
+    case "text": return `<div class="s-text">${esc(s.content)}</div>`;
+    case "checklist": return `<div class="chk">${s.items.map((it,i)=>`<div class="chk-i" onclick="this.classList.toggle('done')"><span class="chk-b">✓</span><span>${esc(it)}</span></div>`).join("")}</div>`;
+    case "specs": return `<div class="specs">${s.items.map(i=>`<div class="spec"><span class="spec-l">${esc(i.l)}</span><span class="spec-v">${esc(i.v)}</span></div>`).join("")}</div>`;
+    case "cards": return `<div class="cards">${s.items.map(i=>`<div class="card"><div class="card-n">${esc(i.n)}</div><div class="card-d">${esc(i.d)}</div></div>`).join("")}</div>`;
+    case "ptable": return `<div class="ptbl">${s.items.map(i=>`<div class="ptbl-r"><span class="ptbl-l">${esc(i.n)}</span><span class="ptbl-v">${esc(i.p)}</span></div>`).join("")}</div>`;
+    case "floss": return `<div>${s.items.map(i=>`<div class="fl-bar"><span class="fl-h">${esc(i.h)}</span><div class="fl-t"><div class="fl-f" style="width:${(parseInt(i.l)/30)*100}%;background:${i.c}"></div></div><span class="fl-p" style="color:${i.c}">${i.l} PSI</span></div>`).join("")}<div style="margin-top:12px">${s.notes.map(n=>`<div class="fl-n">• ${esc(n)}</div>`).join("")}</div></div>`;
+    case "flow": return `<div>${s.steps.map((st,i)=>`<div class="fc-s"><div class="fc-n">${i+1}</div><div><div class="fc-l">${esc(st.l)}</div><div class="fc-d">${esc(st.d)}</div></div></div>${i<s.steps.length-1?'<div class="fc-a">↓</div>':''}`).join("")}</div>`;
+    case "proto": return `<div>${s.sub?`<div class="proto-sub">${esc(s.sub)}</div>`:''}${s.steps.map((st,i)=>`<div class="proto-s"><span class="proto-n">${i+1}</span><span>${esc(st)}</span></div>`).join("")}</div>`;
+    case "dtree": return `<div>${s.options.map((o,i)=>`<div class="dt-opt" id="dt-${active}-${i}" style="--dt-c:${o.c}"><div class="dt-hd" onclick="toggleDT('${active}-${i}')"><div class="dt-ind" style="background:${o.c}"></div><div><div class="dt-nm">${esc(o.n)}</div><div class="dt-cond">${esc(o.cond)}</div></div><div class="dt-chev" id="dtc-${active}-${i}">+</div></div><div class="dt-steps" id="dts-${active}-${i}" style="display:none">${o.steps.map((st,j)=>`<div class="dt-st"><span class="dt-sn" style="color:${o.c}">${j+1}</span><span>${esc(st)}</span></div>`).join("")}</div></div>`).join("")}</div>`;
+    case "warn": return `<div class="warn"><span class="warn-ic">⚠</span><div>${s.items.map(i=>`<div class="warn-i">${esc(i)}</div>`).join("")}</div></div>`;
+    case "nsteps": return `<div>${s.steps.map((st,i)=>`<div class="num-s"><div class="num-c">${i+1}</div><div class="num-t">${esc(st)}</div></div>`).join("")}</div>`;
+    case "pri": {const cc={1:"#F44336",2:"#FF9800",3:"#2196F3",4:"#68686F"}; return `<div>${s.items.map(i=>`<div class="pri-i" style="border-color:${cc[i.p]}30;background:${cc[i.p]}10"><span class="pri-b" style="background:${cc[i.p]}">P${i.p}</span><span>${esc(i.t)}</span></div>`).join("")}</div>`;}
+    case "atk": return `<div><div class="atk-tabs">${s.modes.map((m,i)=>`<button class="atk-tab${i===0?' act':''}" onclick="switchAtk(this,${i},'${active}')">${esc(m.n)}</button>`).join("")}</div><div id="atk-desc-${active}" class="atk-d">${esc(s.modes[0].d)}</div><div id="atk-cfg-${active}">${s.modes[0].configs.map(c=>`<div class="atk-c"><span class="atk-s">${esc(c.s)}</span><span class="atk-p">${esc(c.p)}</span></div>`).join("")}</div></div>`;
+    case "eng": return `<div><div class="eng-sp">${esc(s.sp)}</div>${s.steps.map((st,i)=>`<div class="num-s"><div class="num-c">${i+1}</div><div class="num-t">${esc(st)}</div></div>`).join("")}${s.nt?`<div class="eng-n">📝 ${esc(s.nt)}</div>`:''}</div>`;
+    case "cmp": return `<div class="cmp"><div class="cmp-col"><div class="cmp-t">${esc(s.left.n)}</div>${s.left.pts.map(p=>`<div class="cmp-p">${esc(p)}</div>`).join("")}</div><div class="cmp-vs">VS</div><div class="cmp-col"><div class="cmp-t">${esc(s.right.n)}</div>${s.right.pts.map(p=>`<div class="cmp-p">${esc(p)}</div>`).join("")}</div></div>`;
+    case "equip": return `<div><div class="eq-sp">${esc(s.sp)}</div><div class="eq-u"><strong>Use for:</strong> ${esc(s.uf)}</div>${s.steps?`<div style="margin-top:12px">${s.steps.map((st,i)=>`<div class="num-s"><div class="num-c" style="width:22px;height:22px;min-width:22px;font-size:10px">${i+1}</div><div class="num-t" style="font-size:13px">${esc(st)}</div></div>`).join("")}</div>`:''}${s.w?`<div class="eq-w">⚠ ${esc(s.w)}</div>`:''}</div>`;
+    case "gas": return `<div><div class="gas-u"><strong>Use for:</strong> ${esc(s.uf)}</div><div class="gas-g">${s.gases.map(g=>`<div class="gas-c"><div class="gas-n">${g.n}</div><div class="gas-r"><span>Normal:</span><span>${esc(g.nm)}</span></div><div class="gas-r alm"><span>Alarm:</span><span>${esc(g.al)}</span></div><div class="gas-nt">${esc(g.nt)}</div></div>`).join("")}</div></div>`;
+    case "dist": return `<div>${s.districts.map(d=>`<div class="dist"><div class="dist-n">${esc(d.n)}</div><div class="dist-r"><span>Pressure:</span><span>${esc(d.pr)}</span></div><div class="dist-r"><span>Spacing:</span><span>${esc(d.sp)}</span></div><div class="dist-r"><span>Thread:</span><span>${esc(d.th)}</span></div><div class="dist-nt">${esc(d.nt)}</div></div>`).join("")}</div>`;
+
+    case "fl-calc": return `<div class="calc">
+      <div class="calc-title">Interactive Calculator</div>
+      <div class="calc-row"><span class="calc-label">Hose Size</span>
+        <select class="calc-select" id="fl-hose" onchange="calcFL()">
+          <option value="5">3" Hose (5 PSI/100ft)</option>
+          <option value="10">2½" Hose (10 PSI/100ft)</option>
+          <option value="20" selected>1¾" Hose (20 PSI/100ft)</option>
+          <option value="30">TruID (30 PSI/100ft)</option>
+        </select>
+      </div>
+      <div class="calc-row"><span class="calc-label">Hose Length (ft)</span>
+        <input class="calc-input" type="number" id="fl-len" value="200" step="50" min="0" max="2000" oninput="calcFL()">
+      </div>
+      <div class="calc-row"><span class="calc-label">Appliances</span>
+        <select class="calc-select" id="fl-app" onchange="calcFL()">
+          <option value="0">None (0 PSI)</option>
+          <option value="1">1 Appliance (+10 PSI)</option>
+          <option value="2">2 Appliances (+20 PSI)</option>
+          <option value="3">3 Appliances (+30 PSI)</option>
+        </select>
+      </div>
+      <div class="calc-row"><span class="calc-label">Floor (elevation)</span>
+        <select class="calc-select" id="fl-floor" onchange="calcFL()">
+          <option value="1">1st Floor (0 PSI)</option>
+          <option value="2">2nd Floor (+5 PSI)</option>
+          <option value="3">3rd Floor (+10 PSI)</option>
+          <option value="4">4th Floor (+15 PSI)</option>
+          <option value="5">5th Floor (+20 PSI)</option>
+          <option value="6">6th Floor (+25 PSI)</option>
+          <option value="7">7th Floor (+30 PSI)</option>
+          <option value="8">8th Floor (+35 PSI)</option>
+        </select>
+      </div>
+      <div class="calc-result"><span class="calc-result-label">Total Friction Loss</span><span class="calc-result-value" id="fl-result">40 <span class="calc-result-unit">PSI</span></span></div>
+      <div class="calc-breakdown" id="fl-breakdown">Hose FL: <span>20 × 2.0 = 40 PSI</span><br>Appliances: <span>0 PSI</span><br>Elevation: <span>0 PSI</span><br>─────────────<br>Total: <span>40 PSI</span></div>
+      <div class="calc-note">Based on WFD 5/10/20/30 friction loss rule</div>
+    </div>`;
+
+    case "dp-calc": return `<div class="calc">
+      <div class="calc-title">Interactive Calculator</div>
+      <div class="calc-grid">
+        <div>
+          <div class="calc-row"><span class="calc-label">Nozzle Type</span></div>
+          <div class="calc-row">
+            <select class="calc-select" id="dp-nozzle" onchange="calcDP()" style="width:100%">
+              <option value="50">Smooth Bore Handline (50 PSI)</option>
+              <option value="75">Chief XD / Combo (75 PSI)</option>
+              <option value="80">RAM XD / Deck Gun (80 PSI)</option>
+              <option value="50b">Chief XD Blitz 2½" (50 PSI)</option>
+              <option value="0">Custom...</option>
+            </select>
+          </div>
+          <div class="calc-row" id="dp-custom-row" style="display:none"><span class="calc-label">Custom NP (PSI)</span>
+            <input class="calc-input" type="number" id="dp-custom-np" value="50" min="0" max="300" oninput="calcDP()">
+          </div>
+        </div>
+        <div>
+          <div class="calc-row"><span class="calc-label">Hose Size</span></div>
+          <div class="calc-row">
+            <select class="calc-select" id="dp-hose" onchange="calcDP()" style="width:100%">
+              <option value="5">3" Hose (5 PSI/100ft)</option>
+              <option value="10">2½" Hose (10 PSI/100ft)</option>
+              <option value="20" selected>1¾" Hose (20 PSI/100ft)</option>
+              <option value="30">TruID (30 PSI/100ft)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="calc-grid" style="margin-top:4px">
+        <div class="calc-row"><span class="calc-label">Hose Length (ft)</span>
+          <input class="calc-input" type="number" id="dp-len" value="200" step="50" min="0" max="2000" oninput="calcDP()">
+        </div>
+        <div class="calc-row"><span class="calc-label">Appliances</span>
+          <select class="calc-select" id="dp-app" onchange="calcDP()">
+            <option value="0">None (0 PSI)</option>
+            <option value="1">1 (+10 PSI)</option>
+            <option value="2">2 (+20 PSI)</option>
+            <option value="3">3 (+30 PSI)</option>
+          </select>
+        </div>
+      </div>
+      <div class="calc-row" style="margin-top:4px"><span class="calc-label">Floor</span>
+        <select class="calc-select" id="dp-floor" onchange="calcDP()">
+          <option value="1">1st Floor (0 PSI)</option>
+          <option value="2">2nd Floor (+5 PSI)</option>
+          <option value="3">3rd Floor (+10 PSI)</option>
+          <option value="4">4th Floor (+15 PSI)</option>
+          <option value="5">5th Floor (+20 PSI)</option>
+          <option value="6">6th Floor (+25 PSI)</option>
+          <option value="7">7th Floor (+30 PSI)</option>
+          <option value="8">8th Floor (+35 PSI)</option>
+        </select>
+      </div>
+      <div class="calc-result" style="margin-top:16px"><span class="calc-result-label">Set Discharge Pressure To</span><span class="calc-result-value" id="dp-result">90 <span class="calc-result-unit">PSI</span></span></div>
+      <div class="calc-breakdown" id="dp-breakdown">Nozzle Pressure: <span>50 PSI</span><br>Hose FL: <span>20 × 2.0 = 40 PSI</span><br>Appliances: <span>0 PSI</span><br>Elevation: <span>0 PSI</span><br>─────────────<br>Discharge: <span>50 + 40 + 0 + 0 = 90 PSI</span></div>
+      <div class="calc-note">DP = Nozzle Pressure + Friction Loss + Appliance Loss + Elevation Loss</div>
+    </div>`;
+    default: return '';
+  }
+}
+
+// ── RENDER PAGE ──
+function renderNav() {
+  document.getElementById("navList").innerHTML = CH.map(c => `
+    <div class="ni${active===c.id?' act':''}" onclick="go('${c.id}')">
+      <span class="nn">${c.n}</span><span class="nic">${c.ic}</span><span class="nt">${esc(c.t)}</span>
+      <span class="bk${bookmarks.includes(c.id)?' sv':''}" onclick="event.stopPropagation();toggleBM('${c.id}')">${bookmarks.includes(c.id)?'★':'☆'}</span>
+    </div>
+  `).join("");
+}
+
+function renderContent() {
+  const ch = CH.find(c=>c.id===active);
+  const ci = CH.findIndex(c=>c.id===active);
+  const prev = ci>0?CH[ci-1]:null;
+  const next = ci<CH.length-1?CH[ci+1]:null;
+  document.getElementById("mobileTitle").textContent = `${ch.ic} ${ch.t}`;
+  document.getElementById("content").innerHTML = `<div class="ci">
+    <div class="chd">
+      <div class="cnm">Chapter ${ch.n}</div>
+      <div class="ctt">${ch.ic} ${esc(ch.t)}</div>
+      <div class="cns">
+        <button class="cnb" ${ci===0?'disabled':''} onclick="go('${prev?prev.id:''}')">← Prev</button>
+        <button class="cnb" ${ci===CH.length-1?'disabled':''} onclick="go('${next?next.id:''}')">Next →</button>
+        <span class="cc">${ci+1} of ${CH.length}</span>
+      </div>
+    </div>
+    ${ch.sections.map(s => `<div class="sec">${s.t?`<div class="st">${esc(s.t)}</div>`:''}${renderSection(s)}</div>`).join("")}
+    <div style="display:flex;gap:12px;margin-top:40px;padding-top:24px;border-top:1px solid var(--bd)">
+      ${prev?`<button class="cnb" onclick="go('${prev.id}')" style="flex:1;justify-content:center">← ${esc(prev.t)}</button>`:''}
+      ${next?`<button class="cnb" onclick="go('${next.id}')" style="flex:1;justify-content:center">${esc(next.t)} →</button>`:''}
+    </div>
+  </div>`;
+  document.getElementById("content").scrollTop = 0;
+}
+
+// ── ACTIONS ──
+function go(id) { active=id; renderNav(); renderContent(); document.getElementById("sidebar").classList.remove("open"); document.getElementById("sidebarOverlay").classList.remove("open"); }
+function toggleBM(id) { if(bookmarks.includes(id)) bookmarks=bookmarks.filter(b=>b!==id); else bookmarks.push(id); localStorage.setItem("wfd-bm",JSON.stringify(bookmarks)); renderNav(); }
+function toggleSidebar() { document.getElementById("sidebar").classList.toggle("open"); document.getElementById("sidebarOverlay").classList.toggle("open"); }
+function updateProgress() { const el=document.getElementById("content"); const p=el.scrollTop/(el.scrollHeight-el.clientHeight); document.getElementById("progressFill").style.width=`${Math.min(100,Math.max(0,p*100))}%`; }
+function toggleDT(id) { const el=document.getElementById("dts-"+id); const ch=document.getElementById("dtc-"+id); const opt=document.getElementById("dt-"+id); if(el.style.display==="none"){el.style.display="flex";ch.textContent="−";opt.classList.add("exp");}else{el.style.display="none";ch.textContent="+";opt.classList.remove("exp");} }
+
+// Attack mode switcher
+window._atkData = {};
+CH.forEach(ch => { ch.sections.forEach(s => { if(s.ty==="atk") window._atkData[ch.id]=s.modes; }); });
+function switchAtk(btn,idx,chId) {
+  btn.parentElement.querySelectorAll('.atk-tab').forEach(b=>b.classList.remove('act')); btn.classList.add('act');
+  const modes=window._atkData[chId]; if(!modes) return;
+  const m=modes[idx];
+  document.getElementById("atk-desc-"+chId).textContent=m.d;
+  document.getElementById("atk-cfg-"+chId).innerHTML=m.configs.map(c=>`<div class="atk-c"><span class="atk-s">${esc(c.s)}</span><span class="atk-p">${esc(c.p)}</span></div>`).join("");
+}
+
+// Search
+function openSearch() { document.getElementById("searchOverlay").style.display="flex"; setTimeout(()=>document.getElementById("searchInput").focus(),100); }
+function closeSearch() { document.getElementById("searchOverlay").style.display="none"; document.getElementById("searchInput").value=""; }
+function doSearch() {
+  const q=document.getElementById("searchInput").value.toLowerCase().trim();
+  const el=document.getElementById("searchResults");
+  if(!q){el.innerHTML='<div class="s-empty">Start typing to search all chapters</div>';return;}
+  const res=searchIdx.filter(i=>i.text.includes(q)).reduce((a,i)=>{if(!a.find(x=>x.cid===i.cid&&x.sec===i.sec))a.push(i);return a;},[]).slice(0,12);
+  if(!res.length){el.innerHTML=`<div class="s-empty">No results for "${esc(q)}"</div>`;return;}
+  el.innerHTML=res.map(r=>{const c=CH.find(x=>x.id===r.cid);return`<div class="s-ri" onclick="go('${r.cid}');closeSearch()"><span class="s-rc">${c.n}</span><span class="s-rs-t">${c.ic} ${esc(r.sec)}</span></div>`;}).join("");
+}
+document.addEventListener("keydown",e=>{if((e.metaKey||e.ctrlKey)&&e.key==="k"){e.preventDefault();openSearch();}if(e.key==="Escape")closeSearch();});
+
+// ── CALCULATORS ──
+function calcFL() {
+  const coeff = parseInt(document.getElementById("fl-hose").value);
+  const len = parseFloat(document.getElementById("fl-len").value) || 0;
+  const apps = parseInt(document.getElementById("fl-app").value);
+  const floor = parseInt(document.getElementById("fl-floor").value);
+  const sections = len / 100;
+  const hoseFL = coeff * sections;
+  const appFL = apps * 10;
+  const elevFL = (floor - 1) * 5;
+  const total = hoseFL + appFL + elevFL;
+  document.getElementById("fl-result").innerHTML = `${Math.round(total)} <span class="calc-result-unit">PSI</span>`;
+  document.getElementById("fl-breakdown").innerHTML =
+    `Hose FL: <span>${coeff} × ${sections.toFixed(1)} = ${Math.round(hoseFL)} PSI</span><br>` +
+    `Appliances: <span>${apps} × 10 = ${appFL} PSI</span><br>` +
+    `Elevation: <span>${floor > 1 ? (floor-1) + ' floors × 5 = ' : ''}${elevFL} PSI</span><br>` +
+    `─────────────<br>` +
+    `Total: <span>${Math.round(total)} PSI</span>`;
+}
+
+function calcDP() {
+  const nozSel = document.getElementById("dp-nozzle").value;
+  const customRow = document.getElementById("dp-custom-row");
+  if (nozSel === "0") { customRow.style.display = "flex"; } else { customRow.style.display = "none"; }
+  let np;
+  if (nozSel === "0") { np = parseFloat(document.getElementById("dp-custom-np").value) || 0; }
+  else if (nozSel === "50b") { np = 50; }
+  else { np = parseInt(nozSel); }
+  const coeff = parseInt(document.getElementById("dp-hose").value);
+  const len = parseFloat(document.getElementById("dp-len").value) || 0;
+  const apps = parseInt(document.getElementById("dp-app").value);
+  const floor = parseInt(document.getElementById("dp-floor").value);
+  const sections = len / 100;
+  const hoseFL = coeff * sections;
+  const appFL = apps * 10;
+  const elevFL = (floor - 1) * 5;
+  const total = np + hoseFL + appFL + elevFL;
+  document.getElementById("dp-result").innerHTML = `${Math.round(total)} <span class="calc-result-unit">PSI</span>`;
+  document.getElementById("dp-breakdown").innerHTML =
+    `Nozzle Pressure: <span>${np} PSI</span><br>` +
+    `Hose FL: <span>${coeff} × ${sections.toFixed(1)} = ${Math.round(hoseFL)} PSI</span><br>` +
+    `Appliances: <span>${apps} × 10 = ${appFL} PSI</span><br>` +
+    `Elevation: <span>${floor > 1 ? (floor-1) + ' floors × 5 = ' : ''}${elevFL} PSI</span><br>` +
+    `─────────────<br>` +
+    `Discharge: <span>${np} + ${Math.round(hoseFL)} + ${appFL} + ${elevFL} = ${Math.round(total)} PSI</span>`;
+}
+
+// Init
+renderNav();
+renderContent();
+
+// ── PWA SERVICE WORKER REGISTRATION ──
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').then(r => {
+      console.log('SW registered:', r.scope);
+    }).catch(e => {
+      console.log('SW registration failed (app still works):', e);
+    });
+  });
+}
+</script>
+</body>
+</html>
